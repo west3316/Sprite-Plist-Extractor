@@ -183,9 +183,13 @@ def gen_png_from_data(filename, format):
         box = frame['box']
         rect_on_big = big_image.crop(box)
         real_sizelist = frame['real_sizelist']
-        width, height = real_sizelist
-        max_value = max(width, height)
-        result_image = Image.new('RGBA', (max_value, max_value), (0, 0, 0, 0))
+        if frame['rotated']:
+            width, height = real_sizelist
+            max_value = max(width, height)
+            result_image = Image.new('RGBA', (max_value, max_value), (0, 0, 0, 0))
+        else:
+            result_image = Image.new('RGBA', real_sizelist, (0, 0, 0, 0))
+
         result_box = frame['result_box']
         result_image.paste(rect_on_big, result_box, mask=0)
         if frame['rotated']:
